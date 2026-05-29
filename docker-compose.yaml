@@ -1,14 +1,17 @@
-version: '3.8'
 services:
-  wechat-webhook:
+  webhook:
     image: registry.cn-hangzhou.aliyuncs.com/novacloud/wechat-webhook-new:ems1.1
-    container_name: alertmanager-wechatbot-webhook
+    container_name: alertmanager-webhook
     ports:
       - "8999:8999"
-    environment:
-      - ROBOT_KEY_DEFAULT=6976d6f8-88db-4ee1-98eb-e238f581e378
-      - ADDR=:8999
-      - GRAFANA_URL=172.16.11.236:3000
-      - ALERT_DOMAIN=172.16.11.236:9093
-    restart: unless-stopped
-    network_mode: host
+    volumes:
+      - ./logs:/var/log/wechat-webhook
+    command:
+      - /usr/bin/wechat-webhook
+      - -wecom.key=6976d6f8-88db-4ee1-98eb-e238f581e378
+      - -feishu.key=0a3f8d87-9fd3-4d14-a58d-25ff7dfd9ef5
+      - -dingtalk.key=your-dingtalk-key
+      - -addr=:8999
+      - -log.dir=/var/log/wechat-webhook
+      - -log.file=webhook.log
+      

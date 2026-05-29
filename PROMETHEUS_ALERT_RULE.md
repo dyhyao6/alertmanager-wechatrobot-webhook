@@ -12,7 +12,6 @@ groups:
     for: 1m
     labels:
       severity: critical
-      team: ops
       service: infrastructure
     annotations:
       summary: "实例 {{ $labels.instance }} 已宕机"
@@ -24,9 +23,9 @@ groups:
 | Label 名称 | 必填 | 说明 | 示例值 |
 |-----------|------|------|--------|
 | `severity` | ✅ | 告警级别 | critical / warning / info |
-| `team` | ✅ | 负责团队 | ops / backend / frontend |
 | `service` | ✅ | 服务/业务名称 | api / db / nginx |
 | `instance` | ✅ | 告警实例（自动获取） | 172.16.11.236:9100 |
+| `alertname` | ✅ | 告警规则名（自动） | ServiceDown |
 
 ### severity 级别说明
 
@@ -45,7 +44,7 @@ groups:
 
 ## 四、告警消息格式
 
-最终微信消息格式如下：
+最终各平台消息格式如下：
 
 ```
 ━━━━━━━━━━━━━━━━━━
@@ -54,10 +53,10 @@ groups:
 
 📋 告警信息
 ├─ 🔴 级别：🔴 严重
-├─ 📛 类型：告警规则名
-├─ 🖥 主机：实例地址
+├─ 📛 类型：ServiceDown
+├─ 🖥 主机：192.168.1.100:9100
 ├─ 📝 详情：告警详细描述
-└─ ⏰ 时间：触发时间
+└─ ⏰ 时间：2026-05-29 20:00:00
 ```
 
 ## 五、建议的告警规则配置
@@ -72,7 +71,6 @@ groups:
     for: 1m
     labels:
       severity: critical
-      team: ops
       service: your-service-name
     annotations:
       summary: "服务 {{ $labels.instance }} 已宕机"
@@ -84,7 +82,6 @@ groups:
     for: 5m
     labels:
       severity: warning
-      team: ops
       service: your-service-name
     annotations:
       summary: "【{{ $labels.service }}】CPU 使用率超过 80%"
@@ -96,7 +93,6 @@ groups:
     for: 5m
     labels:
       severity: warning
-      team: ops
       service: your-service-name
     annotations:
       summary: "【{{ $labels.service }}】内存使用率超过 85%"
@@ -108,28 +104,10 @@ groups:
     for: 5m
     labels:
       severity: critical
-      team: ops
       service: your-service-name
     annotations:
       summary: "【{{ $labels.service }}】磁盘空间不足"
       description: "主机 {{ $labels.instance }} 磁盘空间不足，当前剩余: {{ $value }}%"
-```
-
-## 六、消息示例
-
-符合上述规则配置的实际告警消息：
-
-```
-━━━━━━━━━━━━━━━━━━
-🚨 触发中 | 【api】服务 172.16.11.236:9100 已宕机
-━━━━━━━━━━━━━━━━━━
-
-📋 告警信息
-├─ 🔴 级别：🔴 严重
-├─ 📛 类型：ServiceDown
-├─ 🖥 主机：172.16.11.236:9100
-├─ 📝 详情：172.16.11.236:9100 指标采集失败，服务可能已停止
-└─ ⏰ 时间：2026-05-29 20:00:00
 ```
 
 ## 六、字段与消息对应关系
@@ -138,7 +116,7 @@ groups:
 |------------------------------|---------|
 | annotations.summary | 标题 |
 | labels.severity | 级别（带 emoji） |
-| labels.service | 服务 |
+| labels.service | 服务标签 |
 | alertname (自动) | 类型 |
 | labels.instance | 主机 |
 | annotations.description | 详情 |
@@ -148,5 +126,38 @@ groups:
 
 1. **instance 必须包含端口**，用于标识具体主机
 2. **service 名称建议与业务相关**，便于快速定位问题
-3. **team 用于通知分流**，可按团队发送到不同群
-4. **for 表示持续时间**，避免瞬时抖动产生告警
+3. **for 表示持续时间**，避免瞬时抖动产生告警
+4. **summary 建议包含服务名**，会自动加上【服务名】前缀
+5. **description 描述尽量详细**，包含具体指标值
+
+## 八、多平台 Alertmanager 配置
+
+```yaml
+receivers:
+  # 企业微信
+  - name: 'wecom'
+    webhook_configs:
+      - url: 'http://服务地址:8999/webhook/wecom'
+        send_resolved: true
+
+  # 钉钉
+  - name: 'dingtalk'
+    webhook_configs:
+      - url: 'http://服务地址:8999/webhook/dingtalk'
+        send_resolved: true
+
+  # 飞书
+  - name: 'feishu'
+    webhook_configs:
+      - url: 'http://服务地址:8999/webhook/feishu'
+        send_resolved: true
+```
+
+## 九、启动参数
+
+| 参数 | 说明 |
+|------|------|
+| -wecom.key | 企业微信机器人 Webhook Key |
+| -dingtalk.key | 钉钉机器人 Webhook Key |
+| -feishu.key | 飞书机器人 Webhook Key |
+| -addr | 服务监听地址（默认 :8999） |

@@ -1,72 +1,59 @@
 package main
 
 import (
-	"flag"
-	"net/http"
+	"log"
+	"os"
 
-	"github.com/k8stech/alertmanager-wechatrobot-webhook/model"
+	"github.com/k8stech/alertmanager-wechatrobot-webhook/config"
+	"github.com/k8stech/alertmanager-wechatrobot-webhook/logger"
 	"github.com/k8stech/alertmanager-wechatrobot-webhook/notifier"
-
-	"github.com/gin-gonic/gin"
+	"github.com/k8stech/alertmanager-wechatrobot-webhook/router"
 )
-
-var (
-	h           bool
-	RobotKey    string
-	addr        string
-	grafanaUrl  string
-	alertDomain string
-)
-
-func init() {
-	flag.BoolVar(&h, "h", false, "help")
-	flag.StringVar(&RobotKey, "RobotKey", "", "global wechatrobot webhook, you can overwrite by alert rule with annotations wechatRobot")
-	flag.StringVar(&addr, "addr", ":8999", "listen addr")
-	flag.StringVar(&grafanaUrl, "grafanaUrl", "grafana.vnnox.com/d/PwMJtdvnr/k8s-chu-neng-cnanduat", "grafanaUrl url")
-	flag.StringVar(&alertDomain, "alertDomain", "emscn-prometheus.ampaura.tech", "alertDomain url")
-}
 
 func main() {
+	// Load configuration
+	cfg := config.Load()
 
-	flag.Parse()
+	// Initialize logger
+	appLogger, err := logger.New(cfg.LogDir, cfg.LogFile, cfg.LogMaxSize)
+	if err != nil {
+		log.Fatalf("Failed to create logger: %v", err)
+	}
+	defer appLogger.Close()
 
-	if h {
-		flag.Usage()
-		return
+	appLogger.Info("Starting Alertmanager Webhook Server", logger.Fields{
+		"addr": cfg.Addr,
+	})
+
+	// Initialize notifiers
+	notifiers := map[string]notifier.Notifier{
+		notifier.PlatformWeChat:   notifier.NewWeChatNotifier(),
+		notifier.PlatformDingTalk: notifier.NewDingTalkNotifier(),
+		notifier.PlatformFeiShu:   notifier.NewFeiShuNotifier(),
 	}
 
-	router := gin.Default()
-	router.POST("/webhook", func(c *gin.Context) {
-		var notification model.Notification
-		err := c.BindJSON(&notification)
-		//bodyBytes, err := ioutil.ReadAll(c.Request.Body)
-		//if err != nil {
-		//	log.Printf("Error reading request body: %v", err)
-		//	c.AbortWithStatus(http.StatusBadRequest)
-		//	return
-		//}
-		//// 重新设置请求体以确保后续处理可以正常进行
-		//c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
-		//
-		//// 打印请求体内容
-		//log.Printf("Request Body: %s", bodyBytes)
-		////gin.LogFormatter(c.Request)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
+	// Setup router
+	r := router.New(cfg, notifiers, appLogger)
+	engine := r.Setup()
 
-		RobotKey := c.DefaultQuery("key", RobotKey)
-
-		err = notifier.Send(notification, RobotKey, grafanaUrl, alertDomain)
-		//fmt.Println("notification:", notification, "RobotKey:", RobotKey)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-
-		}
-
-		c.JSON(http.StatusOK, gin.H{"message": "send to wechatbot successful!"})
-
+	// Log endpoints
+	appLogger.Info("Endpoints available", logger.Fields{
+		"endpoints": []string{
+			"POST /webhook - WeChat (legacy)",
+			"POST /webhook/wecom - WeChat",
+			"POST /webhook/dingtalk - DingTalk",
+			"POST /webhook/feishu - FeiShu",
+		},
 	})
-	router.Run(addr)
+
+	appLogger.Info("Server listening", logger.Fields{
+		"addr": cfg.Addr,
+	})
+
+	if err := engine.Run(cfg.Addr); err != nil {
+		appLogger.Fatal("Server failed to start", logger.Fields{
+			"error": err.Error(),
+		})
+		os.Exit(1)
+	}
 }

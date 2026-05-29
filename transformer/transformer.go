@@ -3,6 +3,7 @@ package transformer
 import (
 	"bytes"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/k8stech/alertmanager-wechatrobot-webhook/model"
@@ -65,7 +66,7 @@ func getAnnotationValue(annotations map[string]string, key string) string {
 }
 
 // TransformToMarkdown transform alertmanager notification to wechat markdow message
-func TransformToMarkdown(notification model.Notification, grafanaURL string, alertDomain string) (markdown *model.WeChatMarkdown, robotURL string, err error) {
+func TransformToMarkdown(notification model.Notification) (markdown *model.WeChatMarkdown, message string, robotURL string, err error) {
 
 	status := notification.Status
 
@@ -88,18 +89,16 @@ func TransformToMarkdown(notification model.Notification, grafanaURL string, ale
 		severity := getLabelValue(labels, "severity")
 		service := getLabelValue(labels, "service")
 		alertname := getLabelValue(labels, "alertname")
-		alertColor := getAlertColor(status)
 
-		// 标题
-		serviceTag := ""
-		if service != "" {
-			serviceTag = "【" + service + "】"
-		}
+		// 标题 - 如果 summary 已包含服务标签，则不再添加
 		summary := getAnnotationValue(annotations, "summary")
+		if service != "" && !strings.HasPrefix(summary, "【") && !strings.HasPrefix(summary, "(") && !strings.HasPrefix(summary, "<") {
+			summary = "**" + service + "**：「" + summary + "」"
+		}
 
 		// 顶部标题
 		buffer.WriteString(fmt.Sprintf("━━━━━━━━━━━━━━━━━━\n"))
-		buffer.WriteString(fmt.Sprintf("🚨 <font color='%s'>%s</font> | %s%s\n", alertColor, getStatusText(status), serviceTag, summary))
+		buffer.WriteString(fmt.Sprintf("🚨 %s | %s\n", getStatusText(status), summary))
 		buffer.WriteString(fmt.Sprintf("━━━━━━━━━━━━━━━━━━\n\n"))
 
 		// 信息区域 - 使用表格样式
@@ -110,10 +109,11 @@ func TransformToMarkdown(notification model.Notification, grafanaURL string, ale
 		buffer.WriteString(fmt.Sprintf("├─ 📝 详情：%s\n", getAnnotationValue(alert.Annotations, "description")))
 		buffer.WriteString(fmt.Sprintf("└─ ⏰ 时间：%s\n", cstTime.Format("2006-01-02 15:04:05")))
 
+		message = buffer.String()
 		markdown = &model.WeChatMarkdown{
 			MsgType: "markdown",
 			Markdown: &model.Markdown{
-				Content: buffer.String(),
+				Content: message,
 			},
 		}
 	}
