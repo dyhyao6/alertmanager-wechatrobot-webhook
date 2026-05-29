@@ -1,0 +1,124 @@
+[2026-05-29 16:51:03.158] [INFO] Starting Alertmanager Webhook Server addr=:8999
+[2026-05-29 16:51:03.159] [INFO] Endpoints available endpoints=[POST /webhook - WeChat (legacy) POST /webhook/wecom - WeChat POST /webhook/dingtalk - DingTalk POST /webhook/feishu - FeiShu]
+[2026-05-29 16:51:03.159] [INFO] Server listening addr=:8999
+[2026-05-29 16:54:14.327] [INFO] Starting Alertmanager Webhook Server addr=:8999
+[2026-05-29 16:54:14.328] [INFO] Endpoints available endpoints=[POST /webhook - WeChat (legacy) POST /webhook/wecom - WeChat POST /webhook/dingtalk - DingTalk POST /webhook/feishu - FeiShu]
+[2026-05-29 16:54:14.328] [INFO] Server listening addr=:8999
+[2026-05-29 16:54:33.667] [INFO] Notification sent status=firing alerts=1 platform=wecom
+[2026-05-29 16:54:34.168] [INFO] Notification sent alerts=1 platform=feishu status=firing
+[2026-05-29 16:54:34.353] [INFO] Notification sent platform=dingtalk status=firing alerts=1
+[2026-05-29 16:57:10.039] [INFO] Starting Alertmanager Webhook Server addr=:8999
+[2026-05-29 16:57:10.039] [INFO] Endpoints available endpoints=[POST /webhook - WeChat (legacy) POST /webhook/wecom - WeChat POST /webhook/dingtalk - DingTalk POST /webhook/feishu - FeiShu]
+[2026-05-29 16:57:10.039] [INFO] Server listening addr=:8999
+[2026-05-29 16:57:19.406] [INFO] Notification sent platform=wecom status=firing alerts=1
+[2026-05-29 16:57:19.941] [INFO] Notification sent platform=feishu status=firing alerts=1
+[2026-05-29 16:57:20.129] [INFO] Notification sent platform=dingtalk status=firing alerts=1
+[2026-05-29 16:58:27.134] [INFO] Starting Alertmanager Webhook Server addr=:8999
+[2026-05-29 16:58:27.134] [INFO] Endpoints available endpoints=[POST /webhook - WeChat (legacy) POST /webhook/wecom - WeChat POST /webhook/dingtalk - DingTalk POST /webhook/feishu - FeiShu]
+[2026-05-29 16:58:27.134] [INFO] Server listening addr=:8999
+[2026-05-29 16:58:34.558] [INFO] Notification sent platform=wecom status=firing alerts=1
+[2026-05-29 16:58:35.110] [INFO] Notification sent platform=feishu status=firing alerts=1
+[2026-05-29 16:58:35.319] [INFO] Notification sent platform=dingtalk status=firing alerts=1
+[2026-05-29 17:00:07.048] [INFO] Starting Alertmanager Webhook Server addr=:8999
+[2026-05-29 17:00:07.048] [INFO] Endpoints available endpoints=[POST /webhook - WeChat (legacy) POST /webhook/wecom - WeChat POST /webhook/dingtalk - DingTalk POST /webhook/feishu - FeiShu]
+[2026-05-29 17:00:07.048] [INFO] Server listening addr=:8999
+[2026-05-29 17:00:07.049] [FATAL] Server failed to start error=listen tcp :8999: bind: address already in use
+[2026-05-29 17:00:12.785] [INFO] Notification sent alerts=1 platform=wecom status=firing
+[2026-05-29 17:00:13.329] [INFO] Notification sent platform=feishu status=firing alerts=1
+[2026-05-29 17:00:32.364] [INFO] Starting Alertmanager Webhook Server addr=:8999
+[2026-05-29 17:00:32.364] [INFO] Endpoints available endpoints=[POST /webhook - WeChat (legacy) POST /webhook/wecom - WeChat POST /webhook/dingtalk - DingTalk POST /webhook/feishu - FeiShu]
+[2026-05-29 17:00:32.364] [INFO] Server listening addr=:8999
+[2026-05-29 17:00:38.053] [INFO] Notification sent platform=wecom status=firing alerts=1
+[2026-05-29 17:00:38.725] [INFO] Notification sent platform=feishu status=firing alerts=1
+[2026-05-29 17:01:49.491] [INFO] Starting Alertmanager Webhook Server addr=:8999
+[2026-05-29 17:01:49.491] [INFO] Endpoints available endpoints=[POST /webhook - WeChat (legacy) POST /webhook/wecom - WeChat POST /webhook/dingtalk - DingTalk POST /webhook/feishu - FeiShu]
+[2026-05-29 17:01:49.491] [INFO] Server listening addr=:8999
+[2026-05-29 17:02:05.558] [INFO] Notification sent platform=wecom status=firing alerts=1 message=━━━━━━━━━━━━━━━━━━
+🚨 触发中 | 【node-exporter】node节点cpu使用率过高
+━━━━━━━━━━━━━━━━━━
+
+📋 告警信息
+├─ 🔴 级别：🟡 警告
+├─ 📛 类型：node节点cpu使用率过高
+├─ 🖥 主机：172.32.2.191
+├─ 📝 详情：集群名称:储能-ems-cn  node名称:172.32.2.191  cpu使用率超过85%,当前值:4%
+└─ ⏰ 时间：2024-09-10 14:47:48
+
+[2026-05-29 17:02:06.369] [INFO] Notification sent platform=feishu status=firing alerts=1 message=━━━━━━━━━━━━━━━━━━
+🚨 触发中 | 【node-exporter】node节点cpu使用率过高
+━━━━━━━━━━━━━━━━━━
+
+📋 告警信息
+├─ 🔴 级别：🟡 警告
+├─ 📛 类型：node节点cpu使用率过高
+├─ 🖥 主机：172.32.2.191
+├─ 📝 详情：集群名称:储能-ems-cn  node名称:172.32.2.191  cpu使用率超过85%,当前值:4%
+└─ ⏰ 时间：2024-09-10 14:47:48
+
+[2026-05-29 17:04:37.813] [INFO] Starting Alertmanager Webhook Server addr=:8999
+[2026-05-29 17:04:37.813] [INFO] Endpoints available endpoints=[POST /webhook - WeChat (legacy) POST /webhook/wecom - WeChat POST /webhook/dingtalk - DingTalk POST /webhook/feishu - FeiShu]
+[2026-05-29 17:04:37.813] [INFO] Server listening addr=:8999
+[2026-05-29 17:04:46.849] [INFO] Notification sent status=firing alerts=1 message=━━━━━━━━━━━━━━━━━━
+🚨 触发中 | node-exporter：「node节点cpu使用率过高」
+━━━━━━━━━━━━━━━━━━
+
+📋 告警信息
+├─ 🔴 级别：🟡 警告
+├─ 📛 类型：node节点cpu使用率过高
+├─ 🖥 主机：172.32.2.191
+├─ 📝 详情：集群名称:储能-ems-cn  node名称:172.32.2.191  cpu使用率超过85%,当前值:4%
+└─ ⏰ 时间：2024-09-10 14:47:48
+ platform=wecom
+[2026-05-29 17:04:47.429] [INFO] Notification sent platform=feishu status=firing alerts=1 message=━━━━━━━━━━━━━━━━━━
+🚨 触发中 | node-exporter：「node节点cpu使用率过高」
+━━━━━━━━━━━━━━━━━━
+
+📋 告警信息
+├─ 🔴 级别：🟡 警告
+├─ 📛 类型：node节点cpu使用率过高
+├─ 🖥 主机：172.32.2.191
+├─ 📝 详情：集群名称:储能-ems-cn  node名称:172.32.2.191  cpu使用率超过85%,当前值:4%
+└─ ⏰ 时间：2024-09-10 14:47:48
+
+[2026-05-29 17:07:11.125] [INFO] Starting Alertmanager Webhook Server addr=:8999
+[2026-05-29 17:07:11.125] [INFO] Endpoints available endpoints=[POST /webhook - WeChat (legacy) POST /webhook/wecom - WeChat POST /webhook/dingtalk - DingTalk POST /webhook/feishu - FeiShu]
+[2026-05-29 17:07:11.126] [INFO] Server listening addr=:8999
+[2026-05-29 17:07:16.196] [INFO] Notification sent message=━━━━━━━━━━━━━━━━━━
+🚨 触发中 | **node-exporter**：「node节点cpu使用率过高」
+━━━━━━━━━━━━━━━━━━
+
+📋 告警信息
+├─ 🔴 级别：🟡 警告
+├─ 📛 类型：node节点cpu使用率过高
+├─ 🖥 主机：172.32.2.191
+├─ 📝 详情：集群名称:储能-ems-cn  node名称:172.32.2.191  cpu使用率超过85%,当前值:4%
+└─ ⏰ 时间：2024-09-10 14:47:48
+ platform=wecom status=firing alerts=1
+[2026-05-29 17:09:26.677] [INFO] Starting Alertmanager Webhook Server addr=:8999
+[2026-05-29 17:09:26.677] [INFO] Endpoints available endpoints=[POST /webhook - WeChat (legacy) POST /webhook/wecom - WeChat POST /webhook/dingtalk - DingTalk POST /webhook/feishu - FeiShu]
+[2026-05-29 17:09:26.677] [INFO] Server listening addr=:8999
+[2026-05-29 17:09:32.468] [INFO] Notification sent platform=wecom status=firing alerts=1 message=━━━━━━━━━━━━━━━━━━
+🚨 触发中 | <font color="#FFA500">**node-exporter**</font>：「node节点cpu使用率过高」
+━━━━━━━━━━━━━━━━━━
+
+📋 告警信息
+├─ 🔴 级别：🟡 警告
+├─ 📛 类型：node节点cpu使用率过高
+├─ 🖥 主机：172.32.2.191
+├─ 📝 详情：集群名称:储能-ems-cn  node名称:172.32.2.191  cpu使用率超过85%,当前值:4%
+└─ ⏰ 时间：2024-09-10 14:47:48
+
+[2026-05-29 17:11:32.727] [INFO] Starting Alertmanager Webhook Server addr=:8999
+[2026-05-29 17:11:32.728] [INFO] Endpoints available endpoints=[POST /webhook - WeChat (legacy) POST /webhook/wecom - WeChat POST /webhook/dingtalk - DingTalk POST /webhook/feishu - FeiShu]
+[2026-05-29 17:11:32.728] [INFO] Server listening addr=:8999
+[2026-05-29 17:11:42.508] [INFO] Notification sent platform=wecom status=firing alerts=1 message=━━━━━━━━━━━━━━━━━━
+🚨 触发中 | **node-exporter**：「node节点cpu使用率过高」
+━━━━━━━━━━━━━━━━━━
+
+📋 告警信息
+├─ 🔴 级别：🟡 警告
+├─ 📛 类型：node节点cpu使用率过高
+├─ 🖥 主机：172.32.2.191
+├─ 📝 详情：集群名称:储能-ems-cn  node名称:172.32.2.191  cpu使用率超过85%,当前值:4%
+└─ ⏰ 时间：2024-09-10 14:47:48
+
