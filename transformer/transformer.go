@@ -3,7 +3,6 @@ package transformer
 import (
 	"bytes"
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/k8stech/alertmanager-wechatrobot-webhook/model"
@@ -32,6 +31,18 @@ func getStatusText(status string) string {
 		return "已恢复"
 	default:
 		return status
+	}
+}
+
+// 获取状态图标
+func getStatusEmoji(status string) string {
+	switch status {
+	case "firing":
+		return "🚨"
+	case "resolved":
+		return "✅"
+	default:
+		return "📌"
 	}
 }
 
@@ -87,18 +98,14 @@ func TransformToMarkdown(notification model.Notification) (markdown *model.WeCha
 		cstTime := alert.StartsAt.In(cstZone)
 		instance := getLabelValue(labels, "instance")
 		severity := getLabelValue(labels, "severity")
-		service := getLabelValue(labels, "service")
 		alertname := getLabelValue(labels, "alertname")
 
-		// 标题 - 如果 summary 已包含服务标签，则不再添加
+		// 标题
 		summary := getAnnotationValue(annotations, "summary")
-		if service != "" && !strings.HasPrefix(summary, "【") && !strings.HasPrefix(summary, "(") && !strings.HasPrefix(summary, "<") {
-			summary = "**" + service + "**：「" + summary + "」"
-		}
 
 		// 顶部标题
 		buffer.WriteString(fmt.Sprintf("━━━━━━━━━━━━━━━━━━\n"))
-		buffer.WriteString(fmt.Sprintf("🚨 %s | %s\n", getStatusText(status), summary))
+		buffer.WriteString(fmt.Sprintf("%s %s |  %s\n", getStatusEmoji(status), getStatusText(status), summary))
 		buffer.WriteString(fmt.Sprintf("━━━━━━━━━━━━━━━━━━\n\n"))
 
 		// 信息区域 - 使用表格样式
