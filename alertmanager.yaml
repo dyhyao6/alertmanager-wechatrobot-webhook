@@ -11,5 +11,5 @@ templates:
 receivers:
   - name: 'webhook'
     webhook_configs:
-      - url: 'http://124.70.148.224:8888/webhook?key=???????'
+      - url: 'http://目标机器IP:8999/webhook'
         send_resolved: true
