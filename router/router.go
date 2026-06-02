@@ -84,7 +84,7 @@ func (r *Router) wrapHandler(platform string) gin.HandlerFunc {
 		}
 
 		// 获取发送的消息内容并记录日志
-		_, message, _, _ := transformer.TransformToMarkdown(notification)
+		_, message, _, _ := transformer.TransformToMarkdown(notification, platform)
 		r.logger.Info("Notification sent", logger.Fields{
 			"platform": platform,
 			"status":   notification.Status,

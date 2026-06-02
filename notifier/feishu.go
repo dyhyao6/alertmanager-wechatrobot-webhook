@@ -27,7 +27,7 @@ func (n *FeiShuNotifier) Name() string {
 
 // Send sends a notification to FeiShu
 func (n *FeiShuNotifier) Send(notification *model.Notification, robotKey string) error {
-	markdown, message, _, err := transformer.TransformToMarkdown(*notification)
+	markdown, message, _, err := transformer.TransformToMarkdown(*notification, "feishu")
 	if err != nil {
 		return fmt.Errorf("[FeiShu] transform failed: %w", err)
 	}

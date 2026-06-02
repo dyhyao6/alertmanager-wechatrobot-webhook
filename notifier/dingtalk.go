@@ -29,7 +29,7 @@ func (n *DingTalkNotifier) Name() string {
 
 // Send sends a notification to DingTalk
 func (n *DingTalkNotifier) Send(notification *model.Notification, robotKey string) error {
-	markdown, message, _, err := transformer.TransformToMarkdown(*notification)
+	markdown, message, _, err := transformer.TransformToMarkdown(*notification, "dingtalk")
 	if err != nil {
 		return fmt.Errorf("[DingTalk] transform failed: %w", err)
 	}

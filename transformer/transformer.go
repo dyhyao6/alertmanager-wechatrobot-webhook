@@ -76,8 +76,9 @@ func getAnnotationValue(annotations map[string]string, key string) string {
 	return ""
 }
 
-// TransformToMarkdown transform alertmanager notification to wechat markdow message
-func TransformToMarkdown(notification model.Notification) (markdown *model.WeChatMarkdown, message string, robotURL string, err error) {
+// TransformToMarkdown transform alertmanager notification to markdown message
+// platform参数用于适配不同平台的格式
+func TransformToMarkdown(notification model.Notification, platform string) (markdown *model.WeChatMarkdown, message string, robotURL string, err error) {
 
 	status := notification.Status
 
@@ -103,18 +104,28 @@ func TransformToMarkdown(notification model.Notification) (markdown *model.WeCha
 		// 标题
 		summary := getAnnotationValue(annotations, "summary")
 
-		// 顶部标题
-		buffer.WriteString(fmt.Sprintf("━━━━━━━━━━━━━━━━━━\n"))
-		buffer.WriteString(fmt.Sprintf("%s %s |  %s\n", getStatusEmoji(status), getStatusText(status), summary))
-		buffer.WriteString(fmt.Sprintf("━━━━━━━━━━━━━━━━━━\n\n"))
-
-		// 信息区域 - 使用表格样式
-		buffer.WriteString(fmt.Sprintf("📋 告警信息\n"))
-		buffer.WriteString(fmt.Sprintf("├─ 🔴 级别：%s\n", getSeverityDisplay(severity)))
-		buffer.WriteString(fmt.Sprintf("├─ 📛 类型：%s\n", alertname))
-		buffer.WriteString(fmt.Sprintf("├─ 🖥 主机：%s\n", instance))
-		buffer.WriteString(fmt.Sprintf("├─ 📝 详情：%s\n", getAnnotationValue(alert.Annotations, "description")))
-		buffer.WriteString(fmt.Sprintf("└─ ⏰ 时间：%s\n", cstTime.Format("2006-01-02 15:04:05")))
+		// 根据平台选择不同格式
+		switch platform {
+		case "dingtalk":
+			// 钉钉格式 - 简洁markdown
+			buffer.WriteString(fmt.Sprintf("## %s %s | %s\n\n", getStatusEmoji(status), getStatusText(status), summary))
+			buffer.WriteString(fmt.Sprintf("**级别** %s\n\n", getSeverityDisplay(severity)))
+			buffer.WriteString(fmt.Sprintf("**类型** %s\n\n", alertname))
+			buffer.WriteString(fmt.Sprintf("**主机** %s\n\n", instance))
+			buffer.WriteString(fmt.Sprintf("**详情** %s\n\n", getAnnotationValue(alert.Annotations, "description")))
+			buffer.WriteString(fmt.Sprintf("**时间** %s\n", cstTime.Format("2006-01-02 15:04:05")))
+		default:
+			// 微信/飞书格式 - 支持特殊字符
+			buffer.WriteString(fmt.Sprintf("━━━━━━━━━━━━━━━━━━\n"))
+			buffer.WriteString(fmt.Sprintf("%s %s | **%s**\n", getStatusEmoji(status), getStatusText(status), summary))
+			buffer.WriteString(fmt.Sprintf("━━━━━━━━━━━━━━━━━━\n\n"))
+			buffer.WriteString(fmt.Sprintf("📋 告警信息\n"))
+			buffer.WriteString(fmt.Sprintf("├─ 🔴 级别：%s\n", getSeverityDisplay(severity)))
+			buffer.WriteString(fmt.Sprintf("├─ 📛 类型：%s\n", alertname))
+			buffer.WriteString(fmt.Sprintf("├─ 🖥 主机：%s\n", instance))
+			buffer.WriteString(fmt.Sprintf("├─ 📝 详情：%s\n", getAnnotationValue(alert.Annotations, "description")))
+			buffer.WriteString(fmt.Sprintf("└─ ⏰ 时间：%s\n", cstTime.Format("2006-01-02 15:04:05")))
+		}
 
 		message = buffer.String()
 		markdown = &model.WeChatMarkdown{

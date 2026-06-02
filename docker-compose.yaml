@@ -10,7 +10,7 @@ services:
       - /usr/bin/wechat-webhook
       - -wecom.key=6976d6f8-88db-4ee1-98eb-e238f581e378
       - -feishu.key=0a3f8d87-9fd3-4d14-a58d-25ff7dfd9ef5
-      - -dingtalk.key=your-dingtalk-key
+      - -dingtalk.key=c46edefd4b38546527c7e21bb88e0b11a7f9cfa87d00c8e2162f6a82890fca2b
       - -addr=:8999
       - -log.dir=/var/log/wechat-webhook
       - -log.file=webhook.log

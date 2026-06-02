@@ -76,6 +76,6 @@ echo "========== 钉钉 DingTalk 测试 =========="
 curl -X POST \
      -H "Content-Type: application/json" \
      -d "${ALERT_PAYLOAD}" \
-     "${SERVER}/webhook/dingtalk?key=your-dingtalk-key"
+     "${SERVER}/webhook/dingtalk?key=c46edefd4b38546527c7e21bb88e0b11a7f9cfa87d00c8e2162f6a82890fca2b"
 
 echo -e "\n"

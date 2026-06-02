@@ -30,7 +30,7 @@ func (n *WeChatNotifier) Name() string {
 
 // Send sends a notification to WeChat
 func (n *WeChatNotifier) Send(notification *model.Notification, robotKey string) error {
-	markdown, message, _, err := transformer.TransformToMarkdown(*notification)
+	markdown, message, _, err := transformer.TransformToMarkdown(*notification, "wecom")
 	if err != nil {
 		return fmt.Errorf("[WeChat] transform failed: %w", err)
 	}
